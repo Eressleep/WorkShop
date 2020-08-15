@@ -14,7 +14,7 @@ app=FastAPI(title='Timeseries forecasting', description='Timeseries forecasting 
 
 model = Net(LSTM_model.input_dim, LSTM_model.hidden_dim, LSTM_model.output_dim)
 model.to(LSTM_model.device)
-model=LSTM_model.load_model('LSTM_model.pth')
+model=LSTM_model.load_model('/resources/LSTM_model.pth')
 
 
 @app.get("/")
