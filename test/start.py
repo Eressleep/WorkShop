@@ -11,6 +11,12 @@ class ModelName(str, Enum):
 
 app=FastAPI(title='Timeseries forecasting', description='Timeseries forecasting using LSTM and Holt-Winters model')
 
+
+model = Net(LSTM_model.input_dim, LSTM_model.hidden_dim, LSTM_model.output_dim)
+model.to(LSTM_model.device)
+model=LSTM_model.load_model('LSTM_model.pth')
+
+
 @app.get("/")
 async def root():
     return {"message":"hello world" }
@@ -19,10 +25,7 @@ async def root():
 async def create_file(model_name: ModelName, file: UploadFile=File(...)):
     content= await file.read()
     json_obj = json.loads(content.decode('utf8'))
-    if model_name=ModelName.LSTM:
-        model = Net(LSTM_model.input_dim, LSTM_model.hidden_dim, LSTM_model.output_dim)
-        model.to(LSTM_model.device)
-        model=LSTM_model.load_model('LSTM_model.pth')
+    if model_name = ModelName.LSTM:
         datX,datY=LSTM_model.create_dataset(json_obj, LSTM_model.LOOK_BACK)
         train = torch.randn(1,1, LSTM_model.LOOK_BACK)
         train[0][0] = datX[0]
